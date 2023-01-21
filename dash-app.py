@@ -34,6 +34,7 @@ meta_tags = [{'name': 'viewport', 'content': 'width=device-width'}]
 external_stylesheets = [meta_tags]
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+server = app.server
 
 ticker = 'AAPL'
 the_date = 'agg'
