@@ -1,8 +1,10 @@
 # import visualization packages
 import streamlit as st
+import streamlit.components.v1 as components
 import plotly.graph_objects as go
 from plotly.offline import plot
 import plotly.express as px
+from plotly.subplots import make_subplots
 
 # import yahoo finance api to get past earnings dates
 import yfinance as yf
@@ -55,25 +57,57 @@ def main():
     if the_date == 'agg':
         agg = pickle.load(open(f'data/{ticker}/{ticker}-{the_date}-{expiration}.pickle','rb'))
         avg_days = agg['avg_days']
-        fig = px.imshow(agg['mean'].round(1), color_continuous_scale=[(0,'red'), (0.5,'white'), (1.0, 'green')], range_color=(-100 ,100), text_auto=True)
+
+        fig = go.Figure(data=go.Heatmap(z=agg['mean'], colorscale=[(0,'red'), (0.5,'white'), (1.0, 'green')], zmin=-100, zmax=100))
         fig.update(data=[{'customdata': np.dstack((agg['median'], agg['max'], agg['min'])),
-            'hovertemplate': '<b>mean:%{z:.1f}</b> <br>median: %{customdata[0]:.1f} <br>max: %{customdata[1]:.1f} <br>min: %{customdata[2]:.1f}'}])
-        fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])]),  # hide weekends, eg. hide sat to before mon])
+            'hovertemplate': '<b>mean:%{z:.1f}</b> <br>median: %{customdata[0]:.1f} <br>max: %{customdata[1]:.1f} <br>min: %{customdata[2]:.1f}<extra></extra>'}])
         fig.update_yaxes(autorange='reversed')
+
+        ticktext = [str(num) for num in range(22, 1, -1)]
+        ticktext.append('After Earnings')
+        fig.update_traces(
+            text=[str(val) for sublist in agg['mean'].values for val in sublist]
+        )
         fig.update_layout(
-            title=f'{ticker} ATM Straddle Performance in percent<br>expires ~{avg_days} days after earnings',
-            title_x=0.5,
-            yaxis_title='Straddle Initiated',
-            xaxis_title='Trading Days Remaining')
+            xaxis = dict(
+                tickmode = 'array',
+                tickvals = [num for num in range(0, 22)],
+                ticktext = ticktext
+            )
+        )
+        st.plotly_chart(fig)
+
+im = np.random.random((200, 200))
+
+labels = {
+        'x':"X Axis Title",
+        'y':"X Axis Title" ,
+        'color':'Z Label'      
+        }
+fig = px.imshow(im,aspect='equal',labels = labels)  
+
+st.plotly_chart(fig)
+
+# fig = px.imshow(agg['mean'].round(1), color_continuous_scale=[(0,'red'), (0.5,'white'), (1.0, 'green')], range_color=(-100 ,100), text_auto=True)
+# fig.update(data=[{'customdata': np.dstack((agg['median'], agg['max'], agg['min'])),
+#     'hovertemplate': '<b>mean:%{z:.1f}</b> <br>median: %{customdata[0]:.1f} <br>max: %{customdata[1]:.1f} <br>min: %{customdata[2]:.1f}'}])
+# fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])]),  # hide weekends, eg. hide sat to before mon])
+# fig.update_yaxes(autorange='reversed')
+# fig.update_layout(
+#     title=f'{ticker} ATM Straddle Performance in percent<br>expires ~{avg_days} days after earnings',
+#     title_x=0.5,
+#     yaxis_title='Straddle Initiated',
+#     xaxis_title='Trading Days Remaining')
+# st.plotly_chart(fig)
+    
 
 
-    fig = go.Figure(data=go.Heatmap(z=agg['mean']))
-    fig.update_coloraxes(color_continuous_scale=[(0,'red'), (0.5,'white'), (1.0, 'green')])
-    fig.update(data=[{'customdata': np.dstack((agg['median'], agg['max'], agg['min'])),
-        'hovertemplate': '<b>mean:%{z:.1f}</b> <br>median: %{customdata[0]:.1f} <br>max: %{customdata[1]:.1f} <br>min: %{customdata[2]:.1f}<extra></extra>'}])
-    fig.update_yaxes(autorange='reversed')
 
-    st.plotly_chart(fig)
+
+
+
+
+
 
 if __name__ == '__main__':
     main()

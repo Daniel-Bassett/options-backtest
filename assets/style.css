@@ -1,0 +1,86 @@
+body {
+    background-color: #F2F2F2;
+    margin-top: 0%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 5%;
+  }
+  
+  .mainContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .title_container {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     background-color: #9038D5;
+     height: 50px;
+  }
+  
+  .title_text {
+    display: flex;
+    flex-direction: row;
+    color: white;
+  }
+  
+  .flex_display {
+    display: flex;
+  }
+  
+  .create_container {
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    padding: 15px;
+  }
+  
+  .container_slider {
+    background-color: white;
+    border: 1px solid #cccccc;
+  }
+
+  .fix_label {
+    font-size: 15px;
+    margin: 0;
+    padding:  10px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    width: calc(100%-40px);
+  }
+
+  .slider_component {
+    margin-bottom: 15px;
+    width: calc(100%-40px);
+  }
+
+  .table_style {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table_style Thead {
+    background-color: #006fe6;
+    color: white;
+    text-align: left;
+    padding-top: 11px;
+    padding-bottom: 11px
+  }
+
+  .table_style Thead, .table_style Th, .table_style Td {
+    border: 1px solid #dddd;
+    padding: 7px;
+  }
+
+  .header_hover:hover {
+    background-color: #9038D5;
+    color: white;
+  }
+
+  .hover_only_row:hover {
+    background-color: #dddd;
+  }
+
+  .hover_only_row:nth-child(even) {
+    background-color: white;
+  }
