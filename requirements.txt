@@ -1,8 +1,9 @@
 dash
 dash_bootstrap_components
+pandas==1.4
+numpy
 plotly
 plotly.express
 yfinance
 pandas_market_calendars
-pandas
-numpy
+gunicorn
