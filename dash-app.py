@@ -30,12 +30,26 @@ warnings.filterwarnings('ignore')
 import pickle
 
 
-meta_tags = [{'name': 'viewport', 'content': 'width=device-width'}]
-external_stylesheets = [meta_tags]
+# meta_tags = [{'name': 'viewport', 'content': 'width=device-width'}]
+# external_stylesheets = [meta_tags]
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
 server = app.server
 
+tickers = [
+    'AAPL', 'AMZN', 'FDX', 'NVDA', 'BAC',
+    'AMD', 'MSFT', 'T', 'FB', 'BABA', 
+    'DIS', 'TSLA', 'GE', 'NFLX', 'ROKU',
+    'UBER', 'MU', 'INTC', 'AMZN', 'SNAP', 
+    'C', 'JD', 'JPM', 'WFC', 'CSCO', 
+    'XOM', 'SQ', 'BA', 'F', 'BIDU', 'MS', 
+    'BMY', 'PFE', 'SBUX', 'WMT', 'QCOM', 'GM', 
+    'AAL', 'VZ', 'CAT', 'V', 'GS', 'KO', 
+    'TGT', 'BP', 'JNJ', 'GOOG', 'CVS', 'ADBE', 
+    'IBM', 'CVX', 'LYFT', 'MO', 'ATVI', 'SHOP',
+    'MCD', 'NKE', 'COST', 'HPQ', 'LVS'
+                                      ]
+tickers.sort()
 
 app.layout = html.Div([
 
@@ -50,7 +64,7 @@ app.layout = html.Div([
         
         dbc.Row([
             dbc.Col([
-                dcc.Dropdown(options=['AAPL', 'AMZN', 'FDX', 'NVDA', 'BAC', 'AMD', 'MSFT', 'T'], value='AAPL', id='ticker'),
+                dcc.Dropdown(options=tickers, value='AAPL', id='ticker'),
                 dcc.Dropdown(id='earnings_dates', value='agg')
                 ], width=2, class_name='flex_display'),
             dbc.Col([
@@ -104,7 +118,8 @@ def display_data(ticker, earnings_date, horizon):
         avg_days = agg['avg_days']
         fig = px.imshow(agg['mean'].round(1), color_continuous_scale=[(0,'red'), (0.5,'white'), (1.0, 'green')], range_color=(-100 ,100), text_auto=True)
         fig.update(data=[{'customdata': np.dstack((agg['median'], agg['max'], agg['min'])),
-            'hovertemplate': '<b>mean:%{z:.1f}</b> <br>median: %{customdata[0]:.1f} <br>max: %{customdata[1]:.1f} <br>min: %{customdata[2]:.1f}<extra></extra>'}])
+            'hovertemplate': '<b>mean:%{z:.1f}</b> <br>median: %{customdata[0]:.1f} <br>max: %{customdata[1]:.1f} <br>min: %{customdata[2]:.1f}<extra></extra>'}], 
+            layout_coloraxis_showscale=False)
         fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])]),  # hide weekends, eg. hide sat to before mon])
         fig.update_yaxes(autorange='reversed')
         fig.update_layout(
@@ -124,7 +139,8 @@ def display_data(ticker, earnings_date, horizon):
             days_after_earnings = df['days after earnings']
             fig = px.imshow(days_df.round(1), color_continuous_scale=[(0,'red'), (0.5,'white'), (1.0, 'green')], range_color=(-100 ,100), text_auto=True)
             fig.update(data=[{'customdata': np.dstack((days_df.round(1), date_df)),
-                'hovertemplate': '<b>return: %{z:.1f}</b> <br>date: %{customdata[1]}<extra></extra>'}])
+                'hovertemplate': '<b>return: %{z:.1f}</b> <br>date: %{customdata[1]}<extra></extra>'}],
+                layout_coloraxis_showscale=False)
             fig.update_layout(
                 title=f'{ticker} ATM Straddle Performance in percent (expires {days_after_earnings} days after earnings) for {earnings_date}',
                 title_x=0.5,
