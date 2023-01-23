@@ -64,12 +64,18 @@ app.layout = html.Div([
         
         dbc.Row([
             dbc.Col([
+                html.I('Ticker Symbol'),
+                html.Br(),
                 dcc.Dropdown(options=tickers, value='AAPL', id='ticker'),
+
+                html.I('Earnings Date'),
                 dcc.Dropdown(id='earnings_dates', value='agg')
-                ], width=2, class_name='flex_display'),
+            ], width=3, class_name='flex_display'),
+
             dbc.Col([
-                dcc.RadioItems(options=['near', 'med', 'far'], value='near', id='horizon')
-                ], width=2, class_name='flex_display'),
+                html.I('Expiration Horizon'),
+                dbc.RadioItems(options=['near', 'med', 'far'], value='near', id='horizon')
+                ], width=3, class_name='flex_display'),
         ]),
 
             
