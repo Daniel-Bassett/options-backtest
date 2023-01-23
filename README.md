@@ -34,6 +34,7 @@ The end product can be found [here](https://earnings-straddle.onrender.com/)
 This heatmap illustrates how at-the-money straddles have performed leading up to earnings. The top row is for a straddle that 
 was initiated 22 trading days before earnings. The bottom rows show straddles initiated much closer to earnings. The "After Earnings" column on the far right 
 shows the profit/loss AFTER earnings has occurred, so prices fluctuate a lot around that point.
+<br></br>
 How to use this graph? Look at the aggregate for green days that have good means and medians with mins that are not too low. If you see something you like, take a closer look by looking at individual earnings dates.
 
 
