@@ -50,7 +50,7 @@ app.layout = html.Div([
         
         dbc.Row([
             dbc.Col([
-                dcc.Dropdown(options=['AAPL', 'AMZN', 'FDX', 'NVDA', 'BAC'], value='AAPL', id='ticker'),
+                dcc.Dropdown(options=['AAPL', 'AMZN', 'FDX', 'NVDA', 'BAC', 'AMD'], value='AAPL', id='ticker'),
                 dcc.Dropdown(id='earnings_dates', value='agg')
                 ], width=2, class_name='flex_display'),
             dbc.Col([
@@ -85,6 +85,7 @@ def get_earnings_dates(ticker):
     return [{'label': i, 'value': i} for i in earnings_dates]
 
 
+# reset the earnings date drop down to 'agg' when the ticker is changed
 @app.callback(Output(component_id='earnings_dates', component_property='value'),
              [Input(component_id='ticker', component_property='value')])
 def get_earnings_dates(ticker):
@@ -135,7 +136,7 @@ def display_data(ticker, earnings_date, horizon):
             fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])]),  # hide weekends, eg. hide sat to before mon])
             return fig
         except:
-            fig = px.scatter_3d(title="Select a Valid Date")
+            fig = px.scatter_3d(title="The data for this earnings date is missing from the data source")
             return fig
 
                 
