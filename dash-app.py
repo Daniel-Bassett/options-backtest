@@ -50,7 +50,7 @@ app.layout = html.Div([
         
         dbc.Row([
             dbc.Col([
-                dcc.Dropdown(options=['AAPL', 'AMZN', 'FDX', 'NVDA', 'BAC', 'AMD'], value='AAPL', id='ticker'),
+                dcc.Dropdown(options=['AAPL', 'AMZN', 'FDX', 'NVDA', 'BAC', 'AMD', 'MSFT', 'T'], value='AAPL', id='ticker'),
                 dcc.Dropdown(id='earnings_dates', value='agg')
                 ], width=2, class_name='flex_display'),
             dbc.Col([
@@ -80,7 +80,7 @@ app.layout = html.Div([
 @app.callback(Output(component_id='earnings_dates', component_property='options'),
              [Input(component_id='ticker', component_property='value')])
 def get_earnings_dates(ticker):
-    earnings_dates = pickle.load(open(f'data/{ticker}/{ticker}-earnings-dates.pickle','rb'))
+    earnings_dates = pickle.load(open(f'data/{ticker}-earnings-dates.pickle','rb'))
     earnings_dates.insert(0, 'agg')
     return [{'label': i, 'value': i} for i in earnings_dates]
 
@@ -100,7 +100,7 @@ def get_earnings_dates(ticker):
              )
 def display_data(ticker, earnings_date, horizon):
     if earnings_date == 'agg':
-        agg = pickle.load(open(f'data/{ticker}/{ticker}-{earnings_date}-{horizon}.pickle','rb'))
+        agg = pickle.load(open(f'data/{ticker}-{earnings_date}-{horizon}.pickle','rb'))
         avg_days = agg['avg_days']
         fig = px.imshow(agg['mean'].round(1), color_continuous_scale=[(0,'red'), (0.5,'white'), (1.0, 'green')], range_color=(-100 ,100), text_auto=True)
         fig.update(data=[{'customdata': np.dstack((agg['median'], agg['max'], agg['min'])),
@@ -118,7 +118,7 @@ def display_data(ticker, earnings_date, horizon):
         return fig
     else:
         try:
-            df = pickle.load(open(f'data/{ticker}/{ticker}-{earnings_date}-{horizon}.pickle','rb'))
+            df = pickle.load(open(f'data/{ticker}-{earnings_date}-{horizon}.pickle','rb'))
             days_df = df['days_df']
             date_df = df['date_df']
             days_after_earnings = df['days after earnings']
